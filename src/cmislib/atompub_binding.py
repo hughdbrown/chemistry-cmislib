@@ -1058,16 +1058,13 @@ class AtomPubRepository(object):
             aclEl = aclEls[0]
             permMap = {}
             for e in aclEl.childNodes:
-                permList = []
                 if e.localName == 'mapping':
                     keyEls = e.getElementsByTagNameNS(CMIS_NS, 'key')
                     assert len(keyEls) == 1, 'Expected mapping element to have a child named key'
                     permEls = e.getElementsByTagNameNS(CMIS_NS, 'permission')
                     assert len(permEls) >= 1, 'Expected mapping element to have at least one permission element'
                     key = keyEls[0].childNodes[0].data
-                    for permEl in permEls:
-                        permList.append(permEl.childNodes[0].data)
-                    permMap[key] = permList
+                    permMap[key] = [permEl.childNodes[0].data for permEl in permEls]
             self._permMap = permMap
 
         return self._permMap
