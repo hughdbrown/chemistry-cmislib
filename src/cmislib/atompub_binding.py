@@ -259,8 +259,7 @@ class RepositoryService(RepositoryServiceIfc):
         workspaceElements = doc.getElementsByTagNameNS(APP_NS, 'workspace')
         # instantiate a Repository object with the first workspace
         # element we find
-        repository = AtomPubRepository(client, [e for e in workspaceElements if e.nodeType == e.ELEMENT_NODE][0])
-        return repository
+        return AtomPubRepository(client, [e for e in workspaceElements if e.nodeType == e.ELEMENT_NODE][0])
 
 
 class UriTemplate(dict):
