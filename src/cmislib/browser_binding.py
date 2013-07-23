@@ -883,14 +883,10 @@ class BrowserRepository(object):
                                                    self._cmisClient.username,
                                                    self._cmisClient.password,
                                                    **kwargs)
-        types = []
-        for res in result['types']:
-            objectType = BrowserObjectType(self._cmisClient,
-                                    self,
-                                    data=res)
-            types.append(objectType)
-        # return the result
-        return types
+        return [
+            BrowserObjectType(self._cmisClient, self,data=res)
+            for res in result['types']
+        ]
 
     def getTypeDefinition(self, typeId):
 
