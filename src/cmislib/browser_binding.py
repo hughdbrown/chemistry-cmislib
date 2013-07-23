@@ -2641,16 +2641,17 @@ def getSpecializedObject(obj, **kwargs):
 
     moduleLogger.debug('Inside getSpecializedObject')
 
-    if 'cmis:baseTypeId' in obj.getProperties():
-        baseType = obj.getProperties()['cmis:baseTypeId']
-        if baseType == 'cmis:folder':
-            return BrowserFolder(obj._cmisClient, obj._repository, obj.getObjectId(), obj.data, **kwargs)
-        if baseType == 'cmis:document':
-            return BrowserDocument(obj._cmisClient, obj._repository, obj.getObjectId(), obj.data, **kwargs)
-        if baseType == 'cmis:relationship':
-            return BrowserRelationship(obj._cmisClient, obj._repository, obj.getObjectId(), obj.data, **kwargs)
-        if baseType == 'cmis:policy':
-            return BrowserPolicy(obj._cmisClient, obj._repository, obj.getObjectId(), obj.data, **kwargs)
+    baseType = obj.getProperties().get('cmis:baseTypeId')
+    if baseTypeId:
+        ctors = {
+            'cmis:folder': BrowserFolder,
+            'cmis:document': BrowserDocument,
+            'cmis:relationship': BrowserRelationship,
+            'cmis:policy': BrowserPolicy,
+        }
+        ctor = ctors.get(baseType)
+        if ctor:
+            return ctor(obj._cmisClient, obj._repository, obj.getObjectId(), obj.data, **kwargs)
 
     # if the base type ID wasn't found in the props (this can happen when
     # someone runs a query that doesn't select * or doesn't individually
