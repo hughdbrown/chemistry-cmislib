@@ -3861,17 +3861,12 @@ class AtomPubChangeEntryResultSet(AtomPubResultSet):
         Overriding to make it work with a list instead of a dict.
         """
 
-        if self._results:
-            return self._results
-
-        if self._xmlDoc:
+        if not self._results and self._xmlDoc:
             entryElements = self._xmlDoc.getElementsByTagNameNS(ATOM_NS, 'entry')
-            entries = []
-            for entryElement in entryElements:
-                changeEntry = AtomPubChangeEntry(self._cmisClient, self._repository, entryElement)
-                entries.append(changeEntry)
-
-            self._results = entries
+            self._results = [
+                AtomPubChangeEntry(self._cmisClient, self._repository, entryElement)
+                for entryElement in entryElements
+            ]
 
         return self._results
 
