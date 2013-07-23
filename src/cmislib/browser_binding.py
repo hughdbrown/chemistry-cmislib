@@ -1711,16 +1711,15 @@ class BrowserFolder(BrowserCmisObject):
         # get the root folder URL
         createFolderUrl = self._repository.getRootFolderUrl()
 
-        props = {"objectId" : self.id,
-                 "cmisaction" : "createFolder",
-                 "propertyId[0]" : "cmis:name",
-                 "propertyValue[0]" : name}
+        props = {
+            "objectId" : self.id,
+            "cmisaction" : "createFolder",
+            "propertyId[0]" : "cmis:name",
+            "propertyValue[0]" : name
+        }
 
         props["propertyId[1]"] = "cmis:objectTypeId"
-        if properties.has_key('cmis:objectTypeId'):
-            props["propertyValue[1]"] = properties['cmis:objectTypeId']
-        else:
-            props["propertyValue[1]"] = "cmis:folder"
+        props["propertyValue[1]"] = properties.get('cmis:objectTypeId') or "cmis:folder"
 
         propCount = 2
         for prop in properties:
