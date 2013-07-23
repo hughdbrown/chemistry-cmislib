@@ -453,15 +453,12 @@ class AtomPubCmisObject(CmisObject):
 
         linkElements = self.xmlDoc.getElementsByTagNameNS(ATOM_NS, 'link')
 
-        renditions = []
-        for linkElement in linkElements:
-
-            if linkElement.attributes.has_key('rel'):
-                relAttr = linkElement.attributes['rel'].value
-
-                if relAttr == RENDITION_REL:
-                    renditions.append(AtomPubRendition(linkElement))
-        return renditions
+        relattr_iter = ((linkElement, linkElement.attributes.get('rel')) for linkElement in linkElements)
+        return [
+            AtomPubRendition(linkElement)
+            for linkElement, relattr in relattr_iter
+            if relattr and relAttr.value == RENDITION_REL
+        ]
 
     def getAllowableActions(self):
 
