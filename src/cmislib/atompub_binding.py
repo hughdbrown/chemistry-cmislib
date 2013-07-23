@@ -105,7 +105,7 @@ class AtomPubBinding(Binding):
         """
 
         # merge the cmis client extended args with the ones that got passed in
-        if len(self.extArgs) > 0:
+        if self.extArgs:
             kwargs.update(self.extArgs)
 
         resp, content = Rest().get(url,
@@ -132,7 +132,7 @@ class AtomPubBinding(Binding):
         """
 
         # merge the cmis client extended args with the ones that got passed in
-        if len(self.extArgs) > 0:
+        if self.extArgs:
             kwargs.update(self.extArgs)
 
         resp, content = Rest().delete(url,
@@ -157,7 +157,7 @@ class AtomPubBinding(Binding):
         """
 
         # merge the cmis client extended args with the ones that got passed in
-        if len(self.extArgs) > 0:
+        if self.extArgs:
             kwargs.update(self.extArgs)
 
         resp, content = Rest().post(url,
@@ -192,7 +192,7 @@ class AtomPubBinding(Binding):
         """
 
         # merge the cmis client extended args with the ones that got passed in
-        if len(self.extArgs) > 0:
+        if self.extArgs:
             kwargs.update(self.extArgs)
 
         resp, content = Rest().put(url,
