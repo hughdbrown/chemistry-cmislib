@@ -1269,18 +1269,13 @@ class BrowserResultSet(object):
         <cmislib.model.Document object at 0x104851810>
         """
 
-        if self._results:
-            return self._results
-
-        if self._data:
-            entries = []
-            for obj in self._data['objects']:
-                cmisObject = getSpecializedObject(BrowserCmisObject(self._cmisClient,
-                                                                    self._repository,
-                                                                    data=obj['object']))
-                entries.append(cmisObject)
-
-            self._results = entries
+        if not self._results and self._data:
+            self._results = [
+                getSpecializedObject(BrowserCmisObject(self._cmisClient,
+                                                       self._repository,
+                                                       data=obj['object']))
+                for obj in self._data['objects']
+            ]
 
         return self._results
 
