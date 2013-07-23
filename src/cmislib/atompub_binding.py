@@ -709,10 +709,11 @@ class AtomPubCmisObject(CmisObject):
         if isinstance(relTypeId, str):
             relTypeId = CmisId(relTypeId)
 
-        props = {}
-        props['cmis:sourceId'] = self.getObjectId()
-        props['cmis:targetId'] = targetObj.getObjectId()
-        props['cmis:objectTypeId'] = relTypeId
+        props = {
+            'cmis:sourceId': self.getObjectId(),
+            'cmis:targetId': targetObj.getObjectId(),
+            'cmis:objectTypeId': relTypeId,
+        }
         xmlDoc = getEntryXmlDoc(self._repository, properties=props)
 
         url = self._getLink(RELATIONSHIPS_REL)
