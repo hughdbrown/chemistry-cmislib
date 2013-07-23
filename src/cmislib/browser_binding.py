@@ -575,17 +575,22 @@ class BrowserRepository(object):
         if not self._repositoryInfo:
             if self.data is None:
                 self.reload()
-            repoInfo = {'repositoryId': self.data['repositoryId'], 'repositoryName': self.data['repositoryName'],
-                        'resositoryDescription': self.data['repositoryDescription'],
-                        'vendorName': self.data['vendorName'], 'productName': self.data['productName'],
-                        'productVersion': self.data['productVersion'], 'rootFolderId': self.data['rootFolderId'],
-                        'latestChangeLogToken': self.data['latestChangeLogToken'],
-                        'cmisVersionSupported': self.data['cmisVersionSupported'],
-                        'thinClientURI': self.data['thinClientURI'],
-                        'changesIncomplete': self.data['changesIncomplete'],
-                        'changesOnType': self.data['changesOnType'],
-                        'principalIdAnonymous': self.data['principalIdAnonymous'],
-                        'principalIdAnyone': self.data['principalIdAnyone']}
+            repoInfo = {
+                'repositoryId': self.data['repositoryId'],
+                'repositoryName': self.data['repositoryName'],
+                'resositoryDescription': self.data['repositoryDescription'],
+                'vendorName': self.data['vendorName'],
+                'productName': self.data['productName'],
+                'productVersion': self.data['productVersion'],
+                'rootFolderId': self.data['rootFolderId'],
+                'latestChangeLogToken': self.data['latestChangeLogToken'],
+                'cmisVersionSupported': self.data['cmisVersionSupported'],
+                'thinClientURI': self.data['thinClientURI'],
+                'changesIncomplete': self.data['changesIncomplete'],
+                'changesOnType': self.data['changesOnType'],
+                'principalIdAnonymous': self.data['principalIdAnonymous'],
+                'principalIdAnyone': self.data['principalIdAnyone']
+            }
             if self.data.has_key('extendedFeatures'):
                 repoInfo['extendedFeatures'] = self.data['extendedFeatures']
             self._repositoryInfo = repoInfo
