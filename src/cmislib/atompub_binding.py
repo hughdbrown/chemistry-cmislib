@@ -3436,14 +3436,10 @@ class AtomPubACL(ACL):
         cmis:write
         """
 
-        if self._entries:
-            return self._entries
-        else:
-            if self._xmlDoc:
-                # parse XML doc and build entry list
-                self._entries = self._getEntriesFromXml()
-                # then return it
-                return self._entries
+        if not self._entries and self._xmlDoc:
+            # parse XML doc and build entry list
+            self._entries = self._getEntriesFromXml()
+        return self._entries
 
     def _getEntriesFromXml(self):
 
