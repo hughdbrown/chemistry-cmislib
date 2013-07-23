@@ -3356,10 +3356,7 @@ class AtomPubACL(ACL):
         the list--the constructor will convert it to a list for you.
         """
 
-        if aceList:
-            self._entries = aceList
-        else:
-            self._entries = {}
+        self._entries = aceList or {}
         if xmlDoc:
             self._xmlDoc = xmlDoc
             self._entries = self._getEntriesFromXml()
