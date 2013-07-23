@@ -1264,12 +1264,10 @@ class AtomPubRepository(object):
                                                        self._cmisClient.username,
                                                        self._cmisClient.password)
             entryElements = typesXmlDoc.getElementsByTagNameNS(ATOM_NS, 'entry')
-            types = []
-            for entryElement in entryElements:
-                objectType = AtomPubObjectType(self._cmisClient,
-                                        self,
-                                        xmlDoc=entryElement)
-                types.append(objectType)
+            types = [
+                AtomPubObjectType(self._cmisClient, self, xmlDoc=entryElement)
+                for entryElement in entryElements
+            ]
         # otherwise, if a typeId is not specified, return
         # the list of base types
         else:
