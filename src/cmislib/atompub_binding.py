@@ -1361,14 +1361,10 @@ class AtomPubRepository(object):
                                                    self._cmisClient.password,
                                                    **kwargs)
         entryElements = typesXmlDoc.getElementsByTagNameNS(ATOM_NS, 'entry')
-        types = []
-        for entryElement in entryElements:
-            objectType = AtomPubObjectType(self._cmisClient,
-                                    self,
-                                    xmlDoc=entryElement)
-            types.append(objectType)
-        # return the result
-        return types
+        return [
+            AtomPubObjectType(self._cmisClient, self, xmlDoc=entryElement)
+            for entryElement in entryElements
+        ]
 
     def getTypeDefinition(self, typeId):
 
