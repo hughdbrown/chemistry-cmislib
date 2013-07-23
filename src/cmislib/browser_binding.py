@@ -92,7 +92,7 @@ class BrowserBinding(Binding):
                              username=username,
                              password=password,
                              **kwargs)
-        if resp['status'] != '200' and resp['status'] != '201':
+        if resp['status'] not in ('200', '201'):
             self._processCommonErrors(resp, url)
         else:
             result = json.loads(content)
@@ -102,7 +102,7 @@ class BrowserBinding(Binding):
 class RepositoryService(RepositoryServiceIfc):
     def getRepository(self, client, repositoryId):
         result = client.binding.get(client.repositoryUrl, client.username, client.password, **client.extArgs)
-        
+
         if repositoryId in result:
             return BrowserRepository(client, result[repositoryId])
 
@@ -191,7 +191,7 @@ class BrowserCmisObject(object):
         # to be cleared out as well
         if kwargs.has_key('returnVersion'):
             self._objectId = None
-    
+
     def getObjectId(self):
 
         """
@@ -293,7 +293,7 @@ class BrowserCmisObject(object):
                 self.reload()
             for prop in self.data['properties'].itervalues():
                 self._properties[prop['id']] = parsePropValueByType(prop['value'], prop['type'])
-                
+
         return self._properties
 
     def getName(self):
@@ -532,7 +532,7 @@ class BrowserRepository(object):
                 self.reload()
             self._repositoryId = self.data['repositoryId']
         return self._repositoryId
-    
+
     def getRepositoryName(self):
 
         """
@@ -1666,7 +1666,7 @@ class BrowserDocument(BrowserCmisObject):
         result = self._cmisClient.binding.get(byObjectIdUrl.encode('utf-8'),
                                                    self._cmisClient.username,
                                                    self._cmisClient.password)
-        
+
         paths = []
         rs = self.getObjectParents()
         #TODO why is the call to getObjectParents() made if it isn't used?
@@ -1957,7 +1957,7 @@ class BrowserFolder(BrowserCmisObject):
         """
 
         pass
-    
+
     def getPaths(self):
         """
         Returns the paths as a list of strings. The spec says folders cannot
@@ -2342,7 +2342,7 @@ class BrowserACL(object):
                 # append it to the dictionary
                 result[principalId] = ace
         return result
-            
+
     def addEntry(self, ace):
 
         """

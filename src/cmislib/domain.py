@@ -47,7 +47,7 @@ class CmisObject(object):
         """
 
         pass
-    
+
     def getObjectId(self):
 
         """
@@ -359,7 +359,7 @@ class Repository(object):
         """
 
         pass
-    
+
     def getRepositoryName(self):
 
         """
@@ -1623,7 +1623,7 @@ class Folder(CmisObject):
         """
 
         pass
-    
+
     def getPaths(self):
         """
         Returns the paths as a list of strings. The spec says folders cannot
