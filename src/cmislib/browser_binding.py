@@ -2168,10 +2168,10 @@ class BrowserObjectType(object):
 
         if self.data is None or not self.data.has_key('propertyDefinitions'):
             self.reload()
-        props = {}
-        for prop in self.data['propertyDefinitions'].keys():
-            props[prop] = BrowserProperty(self.data['propertyDefinitions'][prop])
-        return props
+        return dict(
+            (prop, BrowserProperty(value))
+            for prop, value in self.data['propertyDefinitions'].iteritems()
+        )
 
     def reload(self, **kwargs):
         """
