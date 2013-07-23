@@ -25,6 +25,16 @@ from exceptions import CmisException, RuntimeException, \
     UpdateConflictException
 
 class Binding(object):
+    exceptions = {
+        '400': InvalidArgumentException,
+        '401': PermissionDeniedException,
+        '403': PermissionDeniedException,
+        '404': ObjectNotFoundException,
+        '405': NotSupportedException,
+        '409': UpdateConflictException,
+        '500': RuntimeException,
+    }
+
     def getRepositoryService(self):
         pass
 
@@ -35,23 +45,9 @@ class Binding(object):
         that are truly global, like 401 not authorized, should be handled
         here. Callers should handle the rest.
         """
-
-        if error['status'] == '401':
-            raise PermissionDeniedException(error['status'], url)
-        elif error['status'] == '400':
-            raise InvalidArgumentException(error['status'], url)
-        elif error['status'] == '404':
-            raise ObjectNotFoundException(error['status'], url)
-        elif error['status'] == '403':
-            raise PermissionDeniedException(error['status'], url)
-        elif error['status'] == '405':
-            raise NotSupportedException(error['status'], url)
-        elif error['status'] == '409':
-            raise UpdateConflictException(error['status'], url)
-        elif error['status'] == '500':
-            raise RuntimeException(error['status'], url)
-        else:
-            raise CmisException(error['status'], url)
+        status = error['status']
+        exception = Binding.exceptions.get(status, CmisException)
+        raise exception(status, url)
 
 
 class RepositoryServiceIfc(object):
