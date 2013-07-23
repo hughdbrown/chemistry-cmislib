@@ -2040,19 +2040,14 @@ class AtomPubResultSet(ResultSet):
         ...
         <cmislib.model.Document object at 0x104851810>
         """
-        if self._results:
-            return self._results
-
-        if self._xmlDoc:
+        if not self._results and self._xmlDoc:
             entryElements = self._xmlDoc.getElementsByTagNameNS(ATOM_NS, 'entry')
-            entries = []
-            for entryElement in entryElements:
-                cmisObject = getSpecializedObject(AtomPubCmisObject(self._cmisClient,
-                                                                    self._repository,
-                                                                    xmlDoc=entryElement))
-                entries.append(cmisObject)
-
-            self._results = entries
+            self._results = [
+                getSpecializedObject(AtomPubCmisObject(self._cmisClient,
+                                                       self._repository,
+                                                       xmlDoc=entryElement))
+                for entryElement in entryElements
+            ]
 
         return self._results
 
