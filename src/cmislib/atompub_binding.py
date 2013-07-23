@@ -20,16 +20,6 @@
 Module containing the Atom Pub binding-specific objects used to work with a CMIS
 provider.
 """
-from cmis_services import RepositoryServiceIfc
-from cmis_services import Binding
-from domain import CmisId, CmisObject, ObjectType, Property, ACL, ACE, ChangeEntry, ResultSet, Rendition
-from net import RESTService as Rest
-from exceptions import CmisException, \
-    ObjectNotFoundException, InvalidArgumentException, \
-    NotSupportedException
-from util import parseDateTimeValue
-import messages
-
 from urllib import quote
 from urlparse import urlparse, urlunparse
 import re
@@ -39,7 +29,15 @@ import datetime
 import StringIO
 import logging
 from xml.dom import minidom
-from util import multiple_replace, parsePropValue, parseBoolValue, toCMISValue
+
+from cmis_services import RepositoryServiceIfc, Binding
+from domain import CmisId, CmisObject, ObjectType, Property, ACL, ACE, ChangeEntry, ResultSet, Rendition
+from net import RESTService as Rest
+from exceptions import CmisException, \
+    ObjectNotFoundException, InvalidArgumentException, \
+    NotSupportedException
+import messages
+from util import parseDateTimeValue, multiple_replace, parsePropValue, parseBoolValue, toCMISValue
 
 moduleLogger = logging.getLogger('cmislib.atompub_binding')
 
@@ -226,7 +224,7 @@ class RepositoryService(RepositoryServiceIfc):
                                          obj._cmisClient.username,
                                          obj._cmisClient.password)
         obj._initData()
-        
+
     def getRepository(self, client, repositoryId):
         doc = client.binding.get(client.repositoryUrl, client.username, client.password, **client.extArgs)
         workspaceElements = doc.getElementsByTagNameNS(APP_NS, 'workspace')
@@ -4243,4 +4241,3 @@ def getEmptyXmlDoc():
     entryElement.setAttribute('xmlns', ATOM_NS)
     entryXmlDoc.appendChild(entryElement)
     return entryXmlDoc
-
