@@ -2136,11 +2136,7 @@ class AtomPubResultSet(ResultSet):
         >>> resultSet.hasNext()
         True
         """
-
-        if self._getLink(NEXT_REL):
-            return True
-        else:
-            return False
+        return bool(self._getLink(NEXT_REL))
 
     def hasPrev(self):
 
@@ -2152,10 +2148,7 @@ class AtomPubResultSet(ResultSet):
         True
         """
 
-        if self._getLink(PREV_REL):
-            return True
-        else:
-            return False
+        return bool(self._getLink(PREV_REL))
 
     def hasFirst(self):
 
@@ -2167,10 +2160,7 @@ class AtomPubResultSet(ResultSet):
         True
         """
 
-        if self._getLink(FIRST_REL):
-            return True
-        else:
-            return False
+        return bool(self._getLink(FIRST_REL))
 
     def hasLast(self):
 
@@ -2182,10 +2172,7 @@ class AtomPubResultSet(ResultSet):
         True
         """
 
-        if self._getLink(LAST_REL):
-            return True
-        else:
-            return False
+        return bool(self._getLink(LAST_REL))
 
 
 class AtomPubDocument(AtomPubCmisObject):
