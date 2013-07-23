@@ -2057,11 +2057,7 @@ class AtomPubResultSet(ResultSet):
         Returns True if the specified objectId is found in the list of results,
         otherwise returns False.
         """
-
-        for obj in self.getResults():
-            if obj.id == objectId:
-                return True
-        return False
+        return any(obj.id == objectId for obj in self.getResults())
 
     def getFirst(self):
 
