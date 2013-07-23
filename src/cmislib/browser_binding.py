@@ -1899,8 +1899,9 @@ class BrowserFolder(BrowserCmisObject):
         """
         The optional filter argument is not yet supported.
         """
-        if self.properties.has_key('cmis:parentId') and self.properties['cmis:parentId'] is not None:
-            return BrowserFolder(self._cmisClient, self._repository, objectId=self.properties['cmis:parentId'])
+        parentId = self.properties.get('cmis:parentId')
+        if parentId is not None:
+            return BrowserFolder(self._cmisClient, self._repository, objectId=parentId)
 
     def deleteTree(self, **kwargs):
 
