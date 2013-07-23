@@ -2326,19 +2326,16 @@ class BrowserACL(object):
         self.logger.info('Creating an instance of ACL')
 
     def _getEntriesFromData(self):
-        if not self._data:
-            return
-        result = {}
-        for entry in self._data['aces']:
-            principalId = entry['principal']['principalId']
-            direct = entry['isDirect']
-            perms = entry['permissions']
-            # create an ACE
-            if len(perms) > 0:
-                ace = BrowserACE(principalId, perms, direct)
-                # append it to the dictionary
-                result[principalId] = ace
-        return result
+        if self._data:
+            ace_iter = (
+                (entry['principal']['principalId'], entry['isDirect'], entry['permissions'])
+                for entry in self._data['aces']
+            )
+            return dict(
+                (principalId, BrowserACE(principalId, perms, direct))
+                for principalId, direct, perms in ace_iter
+                if perms
+            )
 
     def addEntry(self, ace):
 
