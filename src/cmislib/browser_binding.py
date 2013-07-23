@@ -110,12 +110,13 @@ class RepositoryService(RepositoryServiceIfc):
 
     def getRepositories(self, client):
         result = client.binding.get(client.repositoryUrl, client.username, client.password, **client.extArgs)
-
-        repositories = []
-        for repo in result.itervalues():
-            repositories.append({'repositoryId': repo['repositoryId'],
-                                 'repositoryName': repo['repositoryName']})
-        return repositories
+        return [
+            {
+                'repositoryId': repo['repositoryId'],
+                'repositoryName': repo['repositoryName']
+            }
+            for repo in result.itervalues()
+        ]
 
     def getDefaultRepository(self, client):
         result = client.binding.get(client.repositoryUrl, client.username, client.password, **client.extArgs)
