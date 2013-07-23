@@ -244,12 +244,15 @@ class RepositoryService(RepositoryServiceIfc):
         # in the service URL then ask the repository object for its ID
         # and name, and return that back
 
-        repositories = []
-        for node in [e for e in workspaceElements if e.nodeType == e.ELEMENT_NODE]:
-            repository = AtomPubRepository(client, node)
-            repositories.append({'repositoryId': repository.getRepositoryId(),
-                                 'repositoryName': repository.getRepositoryInfo()['repositoryName']})
-        return repositories
+        node_iter = (e for e in workspaceElements if e.nodeType == e.ELEMENT_NODE)
+        repo_iter = (AtomPubRepository(client, node) for node in node_iter)
+        return [
+            {
+                'repositoryId': repository.getRepositoryId(),
+                'repositoryName': repository.getRepositoryInfo()['repositoryName']
+            }
+            for repository in repo_iter
+        ]
 
     def getDefaultRepository(self, client):
         doc = client.binding.get(client.repositoryUrl, client.username, client.password, **client.extArgs)
