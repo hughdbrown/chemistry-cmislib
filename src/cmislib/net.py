@@ -22,9 +22,9 @@ not know anything about CMIS or do anything special with regard to the
 response it receives.
 """
 
-from urllib import urlencode
 import logging
-import httplib2
+import requests
+
 
 class RESTService(object):
 
@@ -37,62 +37,57 @@ class RESTService(object):
         self.user_agent = 'cmislib/%s +http://chemistry.apache.org/'
         self.logger = logging.getLogger('cmislib.net.RESTService')
 
+    def get_headers(self, headers, contentType=None):
+        headers = headers or {}
+        items = headers.items() + [('User-Agent', self.user_agent), ('Content-Type', contentType)]
+        return dict(t for t in items if t[1])
+
     def get(self,
             url,
             username=None,
             password=None,
-            **kwargs):
+            payload=None,  # dict of url params
+            headers=None,  # dict of additional headers
+            **kwargs):     # additional parameters for requests
 
-        """ Makes a get request to the URL specified."""
+        """
+        Makes a get request to the URL specified.
+        """
 
-        headers = {}
-        if kwargs:
-            if 'headers' in kwargs:
-                headers = kwargs['headers']
-                del(kwargs['headers'])
-                self.logger.debug('Headers passed in:%s' % headers)
-            if url.find('?') >= 0:
-                url = url + '&' + urlencode(kwargs)
-            else:
-                url = url + '?' + urlencode(kwargs)
+        self.logger.debug('About to do a GET on: ' + url)
+        return requests.get(url,
+                            auth=(username, password),
+                            headers=self.get_headers(headers),
+                            payload=payload,
+                            **kwargs)
 
-        self.logger.debug('About to do a GET on:' + url)
+    def delete(self,
+               url,
+               username=None,
+               password=None,
+               payload=None,  # dict of url params
+               headers=None,  # dict of additional headers
+               **kwargs):
 
-        h = httplib2.Http()
-        h.add_credentials(username, password)
-        headers['User-Agent'] = self.user_agent
+        """
+        Makes a delete request to the URL specified.
+        """
 
-        return h.request(url, method='GET', headers=headers)
-
-    def delete(self, url, username=None, password=None, **kwargs):
-
-        """ Makes a delete request to the URL specified. """
-
-        headers = {}
-        if kwargs:
-            if 'headers' in kwargs:
-                headers = kwargs['headers']
-                del(kwargs['headers'])
-                self.logger.debug('Headers passed in:%s' % headers)
-            if url.find('?') >= 0:
-                url = url + '&' + urlencode(kwargs)
-            else:
-                url = url + '?' + urlencode(kwargs)
-
-        self.logger.debug('About to do a DELETE on:' + url)
-
-        h = httplib2.Http()
-        h.add_credentials(username, password)
-        headers['User-Agent'] = self.user_agent
-
-        return h.request(url, method='DELETE', headers=headers)
+        self.logger.debug('About to do a DELETE on: ' + url)
+        return requests.delete(url,
+                               auth=(username, password),
+                               headers=self.get_headers(headers),
+                               payload=payload,
+                               **kwargs)
 
     def put(self,
             url,
-            payload,
-            contentType,
+            data,
             username=None,
             password=None,
+            payload=None,
+            contentType=None,
+            headers=None,
             **kwargs):
 
         """
@@ -101,32 +96,22 @@ class RESTService(object):
         specified content type.
         """
 
-        headers = {}
-        if kwargs:
-            if 'headers' in kwargs:
-                headers = kwargs['headers']
-                del(kwargs['headers'])
-                self.logger.debug('Headers passed in:%s' % headers)
-            if url.find('?') >= 0:
-                url = url + '&' + urlencode(kwargs)
-            else:
-                url = url + '?' + urlencode(kwargs)
-
-        self.logger.debug('About to do a PUT on:' + url)
-
-        h = httplib2.Http()
-        h.add_credentials(username, password)
-        headers['User-Agent'] = self.user_agent
-        if contentType is not None:
-            headers['Content-Type'] = contentType
-        return h.request(url, body=payload, method='PUT', headers=headers)
+        self.logger.debug('About to do a PUT on: ' + url)
+        return requests.put(url,
+                            auth=(username, password),
+                            headers=self.get_headers(headers, contentType),
+                            data=data,
+                            payload=payload,
+                            **kwargs)
 
     def post(self,
              url,
-             payload,
-             contentType,
+             data,
              username=None,
              password=None,
+             payload=None,
+             contentType=None,
+             headers=None,
              **kwargs):
 
         """
@@ -135,22 +120,10 @@ class RESTService(object):
         specified content type.
         """
 
-        headers = {}
-        if kwargs:
-            if 'headers' in kwargs:
-                headers = kwargs['headers']
-                del(kwargs['headers'])
-                self.logger.debug('Headers passed in:%s' % headers)
-            if url.find('?') >= 0:
-                url = url + '&' + urlencode(kwargs)
-            else:
-                url = url + '?' + urlencode(kwargs)
-
         self.logger.debug('About to do a POST on:' + url)
-
-        h = httplib2.Http()
-        h.add_credentials(username, password)
-        headers['User-Agent'] = self.user_agent
-        if contentType is not None:
-            headers['Content-Type'] = contentType
-        return h.request(url, body=payload, method='POST', headers=headers)
+        return requests.post(url,
+                             auth=(username, password),
+                             headers=self.get_headers(headers, contentType),
+                             data=data,
+                             payload=payload,
+                             **kwargs)
